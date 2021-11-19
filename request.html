@@ -42,7 +42,7 @@
 
       <!--      -->
       <div>
-        <el-input class="custom-input" type="text" placeholder="请输入 Request URL" v-model="postData.url">
+        <el-input class="custom-input" type="text" placeholder="请输入 Request URL" v-model="requestData.url">
           <template #prepend>
             <span class="iconfont icon-daiceshi" v-show="!responseStatus && !loading"></span>
             <span class="iconfont icon-ceshichenggong" v-show="(responseStatus === 'success')"></span>
@@ -53,7 +53,7 @@
           <template #prefix>
             <el-select
                 class="custom-select1"
-                v-model="postData.method"
+                v-model="requestData.method"
                 placeholder=""
                 @visible-change="changeHandle">
               <el-option label="GET" value="GET"></el-option>
@@ -96,8 +96,7 @@
                       v-for="(domain, index) in dynamicValidateForm.domains"
                       label="键"
                       :key="index"
-                      :prop="'domains.' + index + '.key'"
-                  >
+                      :prop="'domains.' + index + '.key'">
                     <el-input v-model="domain.key" placeholder="键" size="small" :disabled="headerDisable"></el-input>
                   </el-form-item>
                 </el-col>
@@ -107,8 +106,7 @@
                       v-for="(domain, index) in dynamicValidateForm.domains"
                       label="值"
                       :key="index"
-                      :prop="'domains.' + index + '.value'"
-                  >
+                      :prop="'domains.' + index + '.value'">
                     <el-input v-model="domain.value" placeholder="值" size="small" :disabled="headerDisable"></el-input>
 
                     <div class="iconfont icon-guanbibiaoqianye custom-del"
@@ -127,7 +125,7 @@
             </el-form>
           </el-tab-pane>
 
-          <el-tab-pane name="third">
+          <el-tab-pane name="third" :disabled="true">
             <template #label>
               <el-select
                   :disabled="!(reqActiveName==='first')"
@@ -180,10 +178,12 @@
         resActiveName: "first",
 
 
-        // 请求输入栏
-        postData: {
+        // 请求数据
+        requestData: {
           url: 'http://10.0.100.101:8081/manage-central/menus',
-          method: ''
+          method: '',
+          body: '',
+          type: ''
         },
 
         // 请求头
@@ -192,12 +192,6 @@
             key: '',
             value: ''
           }]
-        },
-
-        // 请求体
-        requestData: {
-          body: '',
-          type: ''
         },
 
         // 控制输入栏左侧 请求状态
@@ -209,7 +203,7 @@
 
         headerDisable: false,
 
-        placeholder: '请输入 JSON 格式，例如： {"name": "张三","age": "23"}',
+        placeholder: '请输入',
 
         // 响应体 数据暂存
         resBoxData: {},
@@ -260,7 +254,7 @@
       sendFunc() {
         let _this = this
 
-        if (!this.postData.method || !this.postData.url) {
+        if (!this.requestData.method || !this.requestData.url) {
           ElementPlus.ElMessage.warning('请输入完整请求路径！');
           _this.responseStatus = '';
           return;
@@ -288,7 +282,7 @@
           if (this.requestData.type) {
             contentType = this.requestData.type;
           }
-        }catch (e) {
+        } catch (e) {
           alert(e)
           _this.loading = false;
           _this.responseStatus = '';
@@ -297,44 +291,34 @@
 
 
         $.ajax({
-          method: this.postData.method,
-          url: this.postData.url,
+          method: this.requestData.method,
+          url: this.requestData.url,
           data: data,
           headers: headers,
           contentType: contentType,
           // cache: false,
-          // dataType: 'Json',
+          dataType: 'Json',
           success(result, status, xhr) {
-            debugger
+            // debugger
 
             _this.loading = false;
             _this.responseStatus = status;
             ElementPlus.ElMessage.success(status);
-            _this.responseStatus = status
-
 
             _this.resBoxData = result
             _this.resBoxClick('Copy');
-            // $('#resBody').html(JsonFormat(result));
-            // $("#resBody").JSONView(result, {
-            //   collapsed: true,
-            //   nl2br: true,
-            //   recursive_collapser: false,
-            //   key_marks: false,
-            //   link_marks: false
-            // });
-
             $('#resHeader').html(xhr.getAllResponseHeaders());
           },
 
           error(xhr, status, error) {
-            debugger
+            // debugger
 
             _this.loading = false;
             _this.responseStatus = status;
             ElementPlus.ElMessage.error(status);
 
-            $('#resBody').html(JsonFormat(xhr.responseJSON));
+            _this.resBoxData = xhr.responseJSON;
+            _this.resBoxClick('Copy');
             $('#resHeader').html(xhr.getAllResponseHeaders());
           }
         });
@@ -403,11 +387,11 @@
 
           case 'Preview':
             $("#resBody").JSONView(data, {
-              collapsed: true,
-              nl2br: true,
-              recursive_collapser: false,
+              collapsed: true,  // 是否在第一次渲染时收缩所有的节点，默认值为：false。
+              nl2br: true, // 是否将一个新行转换为<br>字符串，默认值为false
+              recursive_collapser: false,  // 是否递归收缩节点，默认值为false
               key_marks: false,
-              link_marks: false
+              link_marks: false,
             });
             break;
 

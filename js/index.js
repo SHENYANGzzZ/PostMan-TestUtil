@@ -1,8 +1,3 @@
-function showGeoJsonTxt(val) {
-    $('#resBody').html(JsonFormat(val));
-}
-
-
 function JsonFormat(jsonData) {
     var json = jsonData
     if (typeof json != 'string') {
