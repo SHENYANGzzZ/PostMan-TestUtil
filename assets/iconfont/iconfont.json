@@ -1,0 +1,121 @@
+{
+  "id": "2944435",
+  "name": "应急数据上传工具",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "应急数据上传工具",
+  "glyphs": [
+    {
+      "icon_id": "25775568",
+      "name": "展开",
+      "font_class": "zhankai",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "25775569",
+      "name": "收起",
+      "font_class": "shouqi",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "25775301",
+      "name": "通知",
+      "font_class": "tongzhi",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "25775302",
+      "name": "域名",
+      "font_class": "yuming",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "25775303",
+      "name": "分组",
+      "font_class": "fenzu",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "25775285",
+      "name": "测试失败",
+      "font_class": "ceshishibai",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "25775286",
+      "name": "测试中",
+      "font_class": "ceshizhong",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "25775287",
+      "name": "关闭标签页",
+      "font_class": "guanbibiaoqianye",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "25775288",
+      "name": "复制",
+      "font_class": "fuzhi",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "25775289",
+      "name": "测试成功",
+      "font_class": "ceshichenggong",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "25775290",
+      "name": "待测试",
+      "font_class": "daiceshi",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "25775291",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "25775292",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "25775294",
+      "name": "新增",
+      "font_class": "xinzeng",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "25775295",
+      "name": "清空历史记录",
+      "font_class": "qingkonglishijilu",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "25775297",
+      "name": "历史记录",
+      "font_class": "lishijilu",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    }
+  ]
+}

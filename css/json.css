@@ -1,0 +1,29 @@
+/*Json格式样式*/
+pre {
+    padding: 20px 10px 10px 10px;
+    border: 1px #dcdfe6 solid;
+    border-radius: 4px;
+    min-height: 100px;
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.string {
+    color: green;
+}
+
+.number {
+    color: darkorange;
+}
+
+.boolean {
+    color: blue;
+}
+
+.null {
+    color: magenta;
+}
+
+.key {
+    color: red;
+}

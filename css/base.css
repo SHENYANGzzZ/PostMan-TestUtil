@@ -1,0 +1,106 @@
+/* 请求方法 */
+.custom-select1 .el-input--suffix .el-input__inner {
+    width: 90px;
+    height: 36px;
+    margin-top: 2px;
+    margin-left: 6px;
+    padding: 0 0 0 5px;
+    text-align: justify;
+    border: none;
+}
+
+/* 输入 URL */
+.custom-input > .el-input__inner {
+    padding-left: 110px;
+}
+
+/* 发送按钮 */
+.btn-send {
+    background-color: #758dff;
+    color: white;
+    margin-top: 10px;
+    border: none;
+    width: 60px;
+    height: 24px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+/* 简单的交互样式 */
+.btn-send:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.1)
+}
+
+.el-tabs__nav-wrap::after {
+    display: none;
+}
+
+.custom-select2 .el-input__inner {
+    height: 30px;
+    line-height: 30px;
+    width: 260px;
+}
+
+
+.icon-daiceshi,
+.icon-ceshichenggong,
+.icon-ceshishibai,
+.icon-ceshizhong {
+    color: white;
+}
+
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loadingxx {
+    animation: spinner 1s infinite linear;
+}
+
+.custom-del {
+    position: absolute;
+    left: 400px;
+    top: 1px;
+    cursor: pointer;
+}
+
+.icon-guanbibiaoqianye:before {
+    color: #ababab;
+    font-size: 10px;
+    margin-left: 10px;
+}
+
+.demo-dynamic {
+    border: 1px #dcdfe6 solid;
+    border-radius: 4px;
+    padding-top: 10px;
+}
+
+.res-Btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.res-Btn span {
+    border-radius: 4px;
+    padding: 4px 6px;
+    color: #6E6E6E;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 0.9em;
+}
+
+.res-Btn span:hover {
+    background-color: #ECECEC;
+}
+
+.el-form-item {
+    margin-bottom: 5px;
+}

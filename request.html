@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <link rel="shortcut icon" href="assets/icon/gongju.png"/>
+  <title>应急上报工具</title>
+
+  <!-- jquery -->
+  <script src="static/jquery-2.2.1.min.js"></script>
+
+  <!-- 引入 Vue -->
+  <script src="static/vue.global.js"></script>
+
+  <script src="js/index.js"></script>
+
+  <!-- 引入element样式 -->
+  <link rel="stylesheet" type="text/css" href="css/element.css"/>
+  <!-- 引入element组件库 -->
+  <script src="static/element.js"></script>
+
+  <!-- 请联系施点夏 -->
+  <link
+      rel="stylesheet"
+      href="assets/iconfont/iconfont.css"
+  />
+
+  <!-- json样式 -->
+  <link rel="stylesheet" type="text/css" href="css/json.css"/>
+
+  <!-- 基础css -->
+  <link rel="stylesheet" type="text/css" href="css/base.css"/>
+
+
+  <link rel="stylesheet" type="text/css" href="css/jquery.jsonview.css"/>
+  <script src="static/jquery.jsonview.js"></script>
+</head>
+
+<body>
+<div id="root">
+  <div style="padding: 15px 20px;margin-left: 10%">
+    <div style="margin-top: 15px; width: 80%">
+
+      <!--      -->
+      <div>
+        <el-input class="custom-input" type="text" placeholder="请输入 Request URL" v-model="postData.url">
+          <template #prepend>
+            <span class="iconfont icon-daiceshi" v-show="!responseStatus && !loading"></span>
+            <span class="iconfont icon-ceshichenggong" v-show="(responseStatus === 'success')"></span>
+            <span class="iconfont icon-ceshishibai" v-show="(responseStatus === 'error')"></span>
+            <div class="iconfont icon-ceshizhong loadingxx" v-show="loading"></div>
+          </template>
+
+          <template #prefix>
+            <el-select
+                class="custom-select1"
+                v-model="postData.method"
+                placeholder=""
+                @visible-change="changeHandle">
+              <el-option label="GET" value="GET"></el-option>
+              <el-option label="POST" value="POST"></el-option>
+              <el-option label="PUT" value="PUT"></el-option>
+              <el-option label="DELETE" value="DELETE"></el-option>
+            </el-select>
+            <div style="border-right: 2px #E3E3E3 solid;height: 20px;margin-top: 10px"></div>
+          </template>
+          <template #suffix>
+            <el-link class="iconfont icon-lishijilu" :underline="false" style="margin-right: 10px"></el-link>
+          </template>
+        </el-input>
+
+        <button class="btn-send" @click="sendFunc">发送</button>
+      </div>
+
+      <div id="json"></div>
+
+      <!--   请求   -->
+      <div style="margin-top: 50px">
+        <h3>请求 Request</h3>
+
+        <el-tabs v-model="reqActiveName" @tab-click="reqHandleClick">
+          <el-tab-pane label="Body" name="first">
+            <el-input
+                type="textarea"
+                :autosize="{ minRows: 5, maxRows: 10}"
+                :placeholder="placeholder"
+                v-model="requestData.body">
+            </el-input>
+            <el-button @click="jsonCheck" size="mini" style="margin-top: 10px">格式化</el-button>
+          </el-tab-pane>
+
+          <el-tab-pane label="Header" name="second">
+            <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="50px" class="demo-dynamic">
+              <el-row>
+                <el-col :span="8" style="margin-right: 50px">
+                  <el-form-item
+                      v-for="(domain, index) in dynamicValidateForm.domains"
+                      label="键"
+                      :key="index"
+                      :prop="'domains.' + index + '.key'"
+                  >
+                    <el-input v-model="domain.key" placeholder="键" size="small" :disabled="headerDisable"></el-input>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="8">
+                  <el-form-item
+                      v-for="(domain, index) in dynamicValidateForm.domains"
+                      label="值"
+                      :key="index"
+                      :prop="'domains.' + index + '.value'"
+                  >
+                    <el-input v-model="domain.value" placeholder="值" size="small" :disabled="headerDisable"></el-input>
+
+                    <div class="iconfont icon-guanbibiaoqianye custom-del"
+                         @click.prevent="removeDomain(domain)"
+                         v-show="dynamicValidateForm.domains.length >1">
+                    </div>
+
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-form-item>
+                  <el-button @click="addDomain" size="mini">添加</el-button>
+                </el-form-item>
+              </el-row>
+            </el-form>
+          </el-tab-pane>
+
+          <el-tab-pane name="third">
+            <template #label>
+              <el-select
+                  :disabled="!(reqActiveName==='first')"
+                  class="custom-select2"
+                  v-model="requestData.type"
+                  placeholder="请选择">
+                <el-option label="application/xml" value="application/xml"></el-option>
+                <el-option label="application/json" value="application/json"></el-option>
+                <el-option label="application/x-www-form-urlencoded" value="application/x-www-form-urlencoded"></el-option>
+                <el-option label="multipart/form-data" value="multipart/form-data"></el-option>
+              </el-select>
+            </template>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+
+
+      <!--   响应   -->
+      <div style="margin-top: 50px">
+        <h3>响应 Response</h3>
+
+
+        <el-tabs v-model="resActiveName" @tab-click="resHandleClick">
+          <el-tab-pane label="Body" name="first">
+            <div class="res-Btn">
+              <span @click="resBoxClick('Copy')">Copy</span>
+              <span @click="resBoxClick('Preview')">Preview</span>
+            </div>
+            <pre id="resBody"></pre>
+          </el-tab-pane>
+
+          <el-tab-pane label="Header" name="second">
+            <pre id="resHeader"></pre>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+
+<script>
+  const MyVue = {
+    data() {
+      return {
+        message: "Hello Vue!!",
+
+        reqActiveName: "first",
+        resActiveName: "first",
+
+
+        // 请求输入栏
+        postData: {
+          url: 'http://10.0.100.101:8081/manage-central/menus',
+          method: ''
+        },
+
+        // 请求头
+        dynamicValidateForm: {
+          domains: [{
+            key: '',
+            value: ''
+          }]
+        },
+
+        // 请求体
+        requestData: {
+          body: '',
+          type: ''
+        },
+
+        // 控制输入栏左侧 请求状态
+        responseStatus: '',
+
+        // 输入栏左侧 请求中状态
+        loading: false,
+
+
+        headerDisable: false,
+
+        placeholder: '请输入 JSON 格式，例如： {"name": "张三","age": "23"}',
+
+        // 响应体 数据暂存
+        resBoxData: {},
+      };
+    },
+
+    mounted: function () {
+      $('.el-input-group__prepend').css("background", "#E3E3E3");
+      $('.el-input__inner:first').css("border", "2px #E3E3E3 solid");
+    },
+
+    computed: {},
+    watch: {
+      responseStatus: function (val, oldVal) {
+        // 控制请求不同状态下的样式
+        switch (val) {
+          case "success":
+            $('.el-input-group__prepend').css("background", "#28A745");
+            $('.el-input-group__prepend').css("border", "2px #28A745 solid");
+            $('.el-input__inner:first').css("border", "2px #28A745 solid");
+            break;
+
+          case "error":
+            $('.el-input-group__prepend').css("background", "#FF4444");
+            $('.el-input-group__prepend').css("border", "2px #FF4444 solid");
+            $('.el-input__inner:first').css("border", "2px #FF4444 solid");
+            break;
+
+          default:
+            $('.el-input-group__prepend').css("background", "#E3E3E3");
+            $('.el-input-group__prepend').css("border", "2px #E3E3E3 solid");
+            $('.el-input__inner:first').css("border", "2px #E3E3E3 solid");
+        }
+      }
+    },
+
+    methods: {
+      changeHandle() {
+      },
+
+      reqHandleClick() {
+      },
+
+      resHandleClick() {
+      },
+
+      // 发送请求方法
+      sendFunc() {
+        let _this = this
+
+        if (!this.postData.method || !this.postData.url) {
+          ElementPlus.ElMessage.warning('请输入完整请求路径！');
+          _this.responseStatus = '';
+          return;
+        }
+
+        _this.loading = true;
+        _this.responseStatus = '';
+
+        let data = {};
+        let headers = {};
+        let contentType = '';
+
+        try {
+          if (this.requestData.body) {
+            data = JSON.parse(this.requestData.body);
+          }
+
+          let arr = Vue.toRaw(this.dynamicValidateForm.domains);
+          arr.forEach(item => {
+            if (item.key) {
+              headers[item.key] = item.value;
+            }
+          })
+
+          if (this.requestData.type) {
+            contentType = this.requestData.type;
+          }
+        }catch (e) {
+          alert(e)
+          _this.loading = false;
+          _this.responseStatus = '';
+          return
+        }
+
+
+        $.ajax({
+          method: this.postData.method,
+          url: this.postData.url,
+          data: data,
+          headers: headers,
+          contentType: contentType,
+          // cache: false,
+          // dataType: 'Json',
+          success(result, status, xhr) {
+            debugger
+
+            _this.loading = false;
+            _this.responseStatus = status;
+            ElementPlus.ElMessage.success(status);
+            _this.responseStatus = status
+
+
+            _this.resBoxData = result
+            _this.resBoxClick('Copy');
+            // $('#resBody').html(JsonFormat(result));
+            // $("#resBody").JSONView(result, {
+            //   collapsed: true,
+            //   nl2br: true,
+            //   recursive_collapser: false,
+            //   key_marks: false,
+            //   link_marks: false
+            // });
+
+            $('#resHeader').html(xhr.getAllResponseHeaders());
+          },
+
+          error(xhr, status, error) {
+            debugger
+
+            _this.loading = false;
+            _this.responseStatus = status;
+            ElementPlus.ElMessage.error(status);
+
+            $('#resBody').html(JsonFormat(xhr.responseJSON));
+            $('#resHeader').html(xhr.getAllResponseHeaders());
+          }
+        });
+      },
+
+      // 删除一条请求头
+      removeDomain(item) {
+        var index = this.dynamicValidateForm.domains.indexOf(item)
+        if (index !== -1) {
+          this.dynamicValidateForm.domains.splice(index, 1)
+        }
+      },
+
+      // 添加一条请求头
+      addDomain() {
+        this.dynamicValidateForm.domains.push({
+          key: '',
+          value: ''
+        });
+      },
+
+      // 请求body 格式化
+      jsonCheck(json) {
+        let _this = this;
+        var text_value = _this.requestData.body;
+        if (text_value == "") {
+          ElementPlus.ElMessage.warning('不能为空');
+          return false;
+        } else {
+          var res = "";
+          for (var i = 0, j = 0, k = 0, ii, ele; i < text_value.length; i++) {//k:缩进，j:""个数
+            ele = text_value.charAt(i);
+            if (j % 2 == 0 && ele == "}") {
+              k--;
+              for (ii = 0; ii < k; ii++) ele = "    " + ele;
+              ele = "\n" + ele;
+            } else if (j % 2 == 0 && ele == "{") {
+              ele += "\n";
+              k++;
+              for (ii = 0; ii < k; ii++) ele += "    ";
+            } else if (j % 2 == 0 && ele == ",") {
+              ele += "\n";
+              for (ii = 0; ii < k; ii++) ele += "    ";
+            } else if (ele == "\"") j++;
+            res += ele;
+          }
+          _this.requestData.body = res;
+        }
+      },
+
+
+      // 请求体 不同展示 类型切换
+      resBoxClick(type) {
+        let _this = this;
+
+        let data = Vue.toRaw(_this.resBoxData);
+
+        if (JSON.stringify(data) === '{}') {
+          return
+        }
+
+        switch (type) {
+          case 'Copy':
+            $('#resBody').html(JsonFormat(data));
+            break;
+
+          case 'Preview':
+            $("#resBody").JSONView(data, {
+              collapsed: true,
+              nl2br: true,
+              recursive_collapser: false,
+              key_marks: false,
+              link_marks: false
+            });
+            break;
+
+          default:
+        }
+      },
+
+
+    },
+  };
+
+  Vue.createApp(MyVue).use(ElementPlus).mount("#root");
+</script>
+</html>
