@@ -86,6 +86,7 @@
     position: absolute;
     right: 20px;
     top: 20px;
+    z-index: 999;
 }
 
 .res-Btn span {
@@ -105,6 +106,6 @@
     margin-bottom: 5px;
 }
 
-.is-disabled {
+.res-tabs .is-disabled {
     height: 0;
 }

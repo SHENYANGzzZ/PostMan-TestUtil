@@ -138,6 +138,7 @@
                   :disabled="!(reqActiveName==='first')"
                   class="custom-select2"
                   v-model="requestData.type"
+                  clearable
                   placeholder="请选择">
                 <el-option label="application/xml" value="application/xml"></el-option>
                 <el-option label="application/json" value="application/json"></el-option>
@@ -153,7 +154,7 @@
       <div style="margin-top: 50px">
         <h3>响应 Response</h3>
 
-        <el-tabs v-model="resActiveName" @tab-click="resHandleClick">
+        <el-tabs v-model="resActiveName" @tab-click="resHandleClick" class="res-tabs">
           <!--响应体-->
           <el-tab-pane label="Body" name="first">
             <div class="res-Btn">

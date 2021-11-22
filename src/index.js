@@ -103,10 +103,12 @@ const MyVue = {
             let headers = {};
             let contentType = '';
 
+            debugger
+
             // 一些数据的校验
             try {
                 if (this.requestData.body) {
-                    data = JSON.parse(this.requestData.body);
+                    data = this.requestData.body;
                 }
 
                 let arr = Vue.toRaw(this.dynamicValidateForm.domains);
