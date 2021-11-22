@@ -234,7 +234,7 @@ const MyVue = {
         },
 
 
-        // 请求体 不同展示 类型切换
+        // 请求体 不同展示类型 切换
         resBoxClick(type) {
             let _this = this;
 
@@ -263,6 +263,7 @@ const MyVue = {
             }
         },
 
+        // 将Json格式加点颜色
         JsonFormat(jsonData) {
             var json = jsonData
             if (typeof json != 'string') {
