@@ -6,31 +6,31 @@
   <title>应急上报工具</title>
 
   <!-- jquery -->
-    <script src="static/jquery-2.2.1.min.js"></script>
+  <script src="static/jquery-2.2.1.min.js"></script>
 
-    <!-- 引入 Vue -->
-    <script src="static/vue.global.js"></script>
+  <!-- 引入 Vue -->
+  <script src="static/vue.global.js"></script>
 
-    <!-- 引入element样式 -->
-    <link rel="stylesheet" type="text/css" href="css/element.css"/>
-    <!-- 引入element组件库 -->
-    <script src="static/element.js"></script>
+  <!-- 引入element样式 -->
+  <link rel="stylesheet" type="text/css" href="css/element.css"/>
+  <!-- 引入element组件库 -->
+  <script src="static/element.js"></script>
 
-    <!-- 请联系施点夏 -->
-    <link
-        rel="stylesheet"
-        href="assets/iconfont/iconfont.css"
-    />
+  <!-- 请联系施点夏 -->
+  <link
+      rel="stylesheet"
+      href="assets/iconfont/iconfont.css"
+  />
 
-    <!-- json样式 -->
-    <link rel="stylesheet" type="text/css" href="css/json.css"/>
+  <!-- json样式 -->
+  <link rel="stylesheet" type="text/css" href="css/json.css"/>
 
-    <!-- 基础css -->
-    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+  <!-- 基础css -->
+  <link rel="stylesheet" type="text/css" href="css/base.css"/>
 
 
-    <link rel="stylesheet" type="text/css" href="css/jquery.jsonview.css"/>
-    <script src="static/jquery.jsonview.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/jquery.jsonview.css"/>
+  <script src="static/jquery.jsonview.js"></script>
 </head>
 
 <body>
@@ -171,13 +171,10 @@
           <!--responseStatus-->
           <el-tab-pane :disabled="true">
             <template #label>
-              <div class="statusTag">
-                <el-tag type="success" effect="dark" size="small" v-show="(responseStatus === 'success')">{{ statusCode }}</el-tag>
-                <el-tag type="danger" effect="dark" size="small" v-show="(responseStatus === 'error')">{{ statusCode }}</el-tag>
-              </div>
+              <el-tag type="success" effect="dark" size="small" v-show="(responseStatus === 'success')">{{ statusCode }}</el-tag>
+              <el-tag type="danger" effect="dark" size="small" v-show="(responseStatus === 'error')">{{ statusCode }}</el-tag>
             </template>
           </el-tab-pane>
-
         </el-tabs>
       </div>
 
